@@ -1,0 +1,54 @@
+---
+layout: post
+title: "Hacker101 CTF"
+subtitle: "Micro-CMS v1"
+date: 2020-11-20 23:45:13 -0400
+background: '/img/bg-index.jpg'
+---
+
+
+
+
+<h2 class="section-heading">Słowem wstępu</h2>
+<p>W ostatnim poście pisałem o tym, że dobrym miejscem startu dla wszystkich chcących rozpocząć swoją przygodę z bug bounty, jest CTF stworzony przez platformę Hackerone. Dziś się za niego zabieramy, nie jest to post dla całkowicie początkujących jeśli takie zwroty jak: Sql injection albo XSS odsyłam cię do mojego ostatniego wpisu o tym jak zacząć przygodę z Bug Bounty. Jeśli poznałeś już te podstawowe podatności zapraszam cię do lektury lub spróbowania własnych sił w tym challangu: <a href="https://ctf.hacker101.com/ctf">CTF</a></p>
+<h2 class="section-heading">Flaga 1 - Unauthorized Access</h2>
+<p>Po uruchomieniu naszym oczom ukazuje się taki obraz:</p>
+<img class="d-block mx-auto img-fluid"  src="/img/microcms.png" alt="micro cms v1 home page">
+<p>Mamy jakieś dwa utworzone posty i link prowadzący do kreatora, przejdźmy sobie teraz do postu Testing: </p>
+<img class="d-block mx-auto img-fluid"  src="/img/microcmspost.png" alt="micro cms v1 Testing view">
+<p>Widzimy dwa przyciski Go Home i Edit this site, ale to co jeszcze powinno nam się rzucić w oczy to URL naszej strony, który ma format /page/1 możemy przypuszczać, że ta jedynka to id naszego posta, przejdźmy teraz do Markdown Test:</p>
+<img class="d-block mx-auto img-fluid"  src="/img/microcmspost2.png" alt="micro cms v1 Markdown Test view">
+<p>Ciekawe, ponownie widzimy URL w formie /page/2 tym razem z 2, a co gdybyśmy spróbowali wpisać w to miejsce inne wartości, spróbujmy z 3:</p>
+<img class="d-block mx-auto img-fluid"  src="/img/microcmstnotfound.png" alt="micro cms v1 not found">
+<p>Hmm, Not Found, spróbujmy jeszcze kilka wartości: 4, 5... i Bingo, mamy inny komunikat tym razem jest to Forbidden, strona zwraca nam informacje, że nie mamy pozwolenia do tego zasobu:</p>
+<img class="d-block mx-auto img-fluid"  src="/img/microcmsforbidden.png" alt="micro cms v1 not found">
+<p>Już wiemy, że coś tam jest teraz w jaki sposób moglibyśmy spróbować to wyciągnąć. Przeglądając naszą stronę znaleźliśmy przycisk Edit this site spróbujmy w tym miejscu. Tak wygląda strona edycji postu:</p>
+<img class="d-block mx-auto img-fluid"  src="/img/microcmsedit.png" alt="micro cms v1 edit page">
+<p>To co powinno nam się już rzucić w oczy to to, że URL naszej strony ma bardzo podobny format /page/edit/1 spróbujmy w tym miejscu zmienić go na /page/edit/5:</p>
+<img class="d-block mx-auto img-fluid"  src="/img/microcmsflag1.png" alt="micro cms v1 flag1">
+<p>Mamy to! Udało nam się znaleźć naszą pierwszą flagę, autor strony weryfikował czy mamy odpowiednie uprawnienia przy odwiedzaniu postów, ale zapomniał o tym na etapie edycji</p>
+<h2 class="section-heading">Flaga 2 - SQL Injection</h2>
+<p>Skoro już jesteśmy na stronie edycji, zasatanówmy się w jaki sposób może wyglądać zapytanie SQL do bazy w celu wyciągnięcia konkretnego posta, prawdopodobnie w ten sposób:</p>
+<p class="text-center">SELECT post from posts WHERE id='nasze id'</p>
+<p>Teraz załóżmy, że nasze id jest po prostu doklejone do naszego zapytania, to jest wstawiane na etapie zapytania w miejsce 'nasze id'. Jeśli w takiej sytuacji w to miejsce wstawimy wartość: 4' to całe zapytanie się wysypie bo nie wszystkie cudzysłowy będą zamknięte, nie inaczej jest w tym przypadku i po wykonaniu takiego zapytania otrzymujemy drugą flagę: </p>
+<img class="d-block mx-auto img-fluid"  src="/img/microcmsflag2.png" alt="micro cms v1 flag2">
+<p>Aby zapobiec tej podatności autor mógł skorzystać z zapytań parametryzowanych w skrócie polega to na tym że najpierw przygotowujemy zapytanie do bazy z miejscem na argumenty po czym w kolejnym poleceniu te argumenty przypisujemy</p>
+<h2 class="section-heading">Flaga 3 - Stored XSS</h2>
+<p>Przejdźmy teraz może do kreatora postów, wygląda on następująco: </p>
+<img class="d-block mx-auto img-fluid"  src="/img/microcmscreator.png" alt="micro cms v1 post creator">
+<p>Gdy widzimy tyle inputów od razu powinna nam się zaświecić lampka, że być może jest tu XSS. Spróbujmy sobie stworzyć posta z najbardziej banalnym przykładem XSS jaki istnieje</p>
+<img class="d-block mx-auto img-fluid"  src="/img/microcmsxsstry.png" alt="micro cms v1 trying for xss">
+<img class="d-block mx-auto img-fluid"  src="/img/microcmsscrubbed.png" alt="micro cms v1 scrubbed script">
+<p>Widzimy, że nasz post został okrojony ze znaczników &lt;script&gt;, a w źródle strony jest zamknięty w znacznikach "&lt;scrubbed&gt;" Autor stosuje jakiś mechanizm ochrony przed XSSem który filtruje te znaczniki, sprawdźmy teraz czy zaimplementował go także w przypadku tytułu: </p>
+<img class="d-block mx-auto img-fluid"  src="/img/microcmsxss1.png" alt="micro cms v1 xss title try">
+<img class="d-block mx-auto img-fluid"  src="/img/microcmsxsstitle.png" alt="micro cms v1 xss title try">
+<p>Tym razem tagi &lt;script&gt; wyświetlają się na stronie, ale autor ponownie broni się przed xssem prawdopodobnie kodując ostre nawiasy, przez co nasz skrypt nie wykonuje się na stronie. Pamiętajmy jednak, że to nie jest jedyne miejsce w którym wyświetla się nasz tytuł, wyświelta się przecież także na liście postów, przejdźmy do niej: </p>
+<img class="d-block mx-auto img-fluid"  src="/img/microcmsflag3.png" alt="micro cms v1 3 flag">
+<p>No i trafiliśmy! Mimo, że autor weryfikował informacje wpisane przez użytkownika podczas wyświetlania postu, w tym miejscu już tego nie robił co doprowadziło do podatności XSS</p>
+<h2 class="section-heading">Flaga 4 - Stored XSS</h2>
+<p>Wróćmy jeszcze do kreatora postów, na samym dole jest komunikat: "Markdown is suported, but scripts are not" co sugeruje nam, że wewnątrz naszych postów możemy korzystać z HTML'a natomiast tagi &lt;script&gt; nie są wspierane. Szczęśliwie jednak javascript możemy wykonywać z poziomu tagów html np. tworząc prosty button z eventem onclick: </p>
+<img class="d-block mx-auto img-fluid"  src="/img/microcmsbutton.png" alt="micro cms v1 button with javascript">
+<img class="d-block mx-auto img-fluid"  src="/img/microcmsflag4.png" alt="micro cms v1 flag 4">
+<p>Po kliknięciu w button wyświetla się alert, a po przejściu do źródła strony, widzimy naszą ostatnią flagę</p>
+<h2 class="section-heading">Słowem zakończenia</h2>
+<p>Mam nadzieję, że spróbowałeś rozwiązać tego CTF najpierw samemu, pamiętaj, że hackowanie to praktyka i samo czytanie writeupów nie zda się na wiele. Cieszę się, że dotrwałeś do końca tego posta i liczę na to, że czegoś się z niego nauczyłeś. Zachęcam cię do spróbowania swoich sił w innym challangu z hacker101 ctf i do usłyszenia. Happy Hacking ;)</p>
