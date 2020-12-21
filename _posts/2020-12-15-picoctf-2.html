@@ -1,0 +1,36 @@
+---
+layout: post
+title: "Web Exploitation cz.1"
+subtitle: "PicoGym"
+date: 2020-12-15 20:00:13 -0400
+background: '/img/bg-index.jpg'
+---
+
+<h2 class="section-heading">O tym co dzisiaj</h2>
+<p>Ostatnio na blogu również pisałem o picoCTF rozwiązując zadania z kategorii general skills, zostało ich jeszcze kilka ale dziś dla odmiany postanowiłem poruszyć zadania z kategorii eksploitacji webowej. Kategorii która mnie jako osoby aspirującej do zostania bug hunterem aplikacji webowych interesuje najbardziej. Koniec gadania przejdźmy do konkretów</p>
+<h2 class="section-heading">Insp3ct0r</h2>
+<img class="d-block mx-auto img-fluid" src="/img/web1.png" alt="PicoCTF1 Web 1">
+<p>Opis zadania z góry mówi nam co mamy zrobić. Przechodząc do strony nie mamy wiele jedynie dwie zakładki które właściwie na nic nas nie nakierowywują, spróbujmy zbadać źródło strony. Rozwijając kolejne znaczniki htmla w końcu trafiamy na część naszej flagi.</p>
+<img class="d-block mx-auto img-fluid" src="/img/web1-part1.png" alt="PicoCTF1 Web 1 part 1">
+<p>Sprawdziliśmy już HTMLa to może pora sprawdzić inne pliki które składają się na naszą stronę. Przejdźmy więc do zakładki Sources  i wybierzmy plik mycss.css. Nasz trop był słuszny a naszym oczom ukazuje się kolejna część naszej flagi</p>
+<img class="d-block mx-auto img-fluid" src="/img/web1-part2.png" alt="PicoCTF1 Web 1 part 2">
+<p>Za nami już HTML, CSS przyszła kolej na Javascript, z tej samej zakładki wybierz plik myjs.js. I tak jak mogliśmy się spodziewać widzimy trzecią i ostatnią część naszej flagi</p>
+<img class="d-block mx-auto img-fluid" src="/img/web1-part3.png" alt="PicoCTF1 Web 1 part 3">
+<p>Znalezienie pierwszej flagi było dosyć proste</p>
+<h2 class="section-heading">logon</h2>
+<img class="d-block mx-auto img-fluid" src="/img/web2.png" alt="PicoCTF1 Web 2">
+<p>Tym razem naszym zadaniem jest zalogowanie jako logon i zdobycie flagi. Przed nami formularz logowania a mamy tylko login, postanowiłem spróbować z pustym polem i bam udało nam się zalogować </p>
+<img class="d-block mx-auto img-fluid" src="/img/logon1.png" alt="PicoCTF1 logon">
+<p>Logowanie się powiodło ale przed nami wielki komunikat no flag for you. Szybki rzut oka w źródło strony i nic. Kiedyś podczas rozwiązywania innego CTFa spotkałem się z mechanizmem, że flaga była ukryta pod innm elementem na stronie, niestety w tym przypadku nie był to trafny strzał. Strona nie jest zaawansowana, nie ma tu nic więcej poza plikiem HTML i stylami i javascriptem z zewnątrz.Chwilę zajęło mi zanim uświadomiłem sobie, że no przecież jest coś takiego jak ciasteczka. Postanowiłem zbadać ten trop. Ciasteczka możemy podejrzeć przechodząc do zakładki Application a następnie po lewej stronie do zakładki Cookies</p>
+<img class="d-block mx-auto img-fluid" src="/img/logon2.png" alt="PicoCTF1 logon2">
+<p>Mamy ciasteczko o nazwie admin ustawione na wartość False. Hmm to ciekawe a co się stanie gdy zamienimy ją na True. Szybka podmianka odświeżenie strony i... Bingo mamy naszą flagę:</p>
+<img class="d-block mx-auto img-fluid" src="/img/logonflag.png" alt="PicoCTF1 logon flag">
+<h2 class="section-heading">where are the robots</h2>
+<p>To zadanie było dla mnie wyjątkowo łatwe, wiedziałem, że istnieje coś takiego jak plik robots.txt który jest wykorzystywany do informowania botów indeksujących jakich strony nie powinny indeksować. Po przejściu w podany link z dopisanym /robots.txt naszym oczom ukazuje się to:</p>
+<img class="d-block mx-auto img-fluid" src="/img/robots.png" alt="PicoCTF1 robots">
+<p>Widać jak na tacy, że mamy tutaj podany jeden link /477ce.html spróbujmy do niego przejść:</p>
+<img class="d-block mx-auto img-fluid" src="/img/robotsflag.png" alt="PicoCTF1 robots flag">
+<p>I widzimy naszą flagę</p>
+<h2 class="section-heading">To na tyle</h2>
+<p>To na tyle w dzisiejszym poście, jak widać zadania z kategorii eksploitacji webowej są troche dłuższe przez co będę zamieszczał po 3 na raz, żeby te posty nie były przeładowane kontentem. Z tego miejsca jak zwykle namawiam was do spróbwania swoich sił samemu CTFy dają niesamowitą satysfakcję, na samym picoCTF jest tego sporo, także jak zwykle: Miłego Hackowania :)</p>
+
