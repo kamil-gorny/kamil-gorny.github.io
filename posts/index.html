@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Posty
+title: Posts
 background: '/img/bg-index.jpg'
 ---
 
@@ -15,7 +15,7 @@ background: '/img/bg-index.jpg'
     <h3 class="post-subtitle">{{ post.excerpt | strip_html | truncatewords: 15 }}</h3>
     {% endif %}
   </a>
-  <p class="post-meta">Napisane przez
+  <p class="post-meta">Written by
     {% if post.author %}
     {{ post.author }}
     {% else %}
@@ -36,11 +36,11 @@ background: '/img/bg-index.jpg'
 
   {% if paginator.previous_page %}
   <a class="btn btn-primary float-left" href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}">&larr;
-    Nowsze<span class="d-none d-md-inline">Artykuły</span></a>
+    Newer<span class="d-none d-md-inline">Articles</span></a>
   {% endif %}
 
   {% if paginator.next_page %}
-  <a class="btn btn-primary float-right" href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}">Starsze<span class="d-none d-md-inline"> Artykuły</span> &rarr;</a>
+  <a class="btn btn-primary float-right" href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}">Older<span class="d-none d-md-inline">Articles</span> &rarr;</a>
   {% endif %}
 
 </div>

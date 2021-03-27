@@ -41,13 +41,13 @@ layout: default
             <h3 class="post-subtitle">{{ post.excerpt | strip_html | truncatewords: 15 }}</h3>
             {% endif %}
           </a>
-          <p class="post-meta">Napisane przez
+          <p class="post-meta">Written by
             {% if post.author %}
             {{ post.author }}
             {% else %}
             {{ site.author }}
             {% endif %}
-            {{ post.date | date: '%B %d, %Y' }}         
+            {{ post.date | date: '%B %d, %Y' }}
           </p>
         </article>
 
@@ -57,7 +57,7 @@ layout: default
 
         <!-- Pager -->
         <div class="clearfix">
-          <a class="btn btn-primary float-right" href="{{"/posts" | relative_url }}">Zobacz wszystkie artykuły &rarr;</a>
+          <a class="btn btn-primary float-right" href="{{"/posts" | relative_url }}">Show all articles &rarr;</a>
         </div>
 
       </div>
