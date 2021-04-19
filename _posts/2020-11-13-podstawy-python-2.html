@@ -1,0 +1,43 @@
+---
+layout: post
+title: "Python cz.2: Zmienne, printy i user input"
+subtitle: "Jak pobierać wartości od użytkownika i je printować"
+date: 2020-11-13 20:00:13 -0400
+background: '/img/bg-index.jpg'
+---
+
+<h2 class="section-heading">Czego się nauczymy?</h2>
+<p>Ostatnio nauczyliśmy się jak uruchomić nasz pierwszy program i wyświetlić komunikat w terminalu.
+Dzisiaj pokażę jak pobierać wartości od użytkownika, przechowywać je i wyświetlać za pomocą printa</p>
+
+<h2 class="section-heading">Zmienne</h2>
+<p>Ostatnim razem wyświetlaliśmy tekst "Hello world", załóżmy teraz sytauję, że chcemy go wyświetlić wielokrotnie.
+Wypisujemy print("Hello world") powiedzmy 20 razy i nagle nachodzi nas kaprys żeby zamiast Hello było słowo Hi.
+W tym momencie mamy problem bo musimy zmienić słowo Hello 20 razy. Z pomocą przychodzą nam zmienne które działają jak schowki na nasze dane. Zmienne alokują odpowiednią ilość pamięci i decydują co może być przechowywane.
+Deklarujemy je w poniższy sposób:</p>
+<img class="d-block mx-auto img-fluid" src="/img/zmienna.png" alt="variable declaration and usage">
+<p>Jeśli teraz zechcemy zmienić treść naszego komunikatu wystarczy, że zmienimy go w jednym miejscu</p>
+<p>UWAGA! zmienne powinny opisywać do czego służą, zwróć uwagę, że w powyższym przykładzie zamiast napisać np. tekst napisałem tekst_powitalny.
+Do tego wszystkie wyrazy powinny być oddzielone podłogami '_' i napisane małymi literami (wyjątek stanowią tzw. zmienne globalne ale o nich kiedyindziej)</p>
+
+<h2 class="section-heading">Formatowanie printów</h2>
+<p>Skoro potrafimy już definiować zmienne być może chcielibyśmy użyć ich w naszych printach. Jest na to kilka metod, ja przedstawię dwie z których korzystam najczęściej:</p>
+<img class="d-block mx-auto img-fluid" src="/img/formatowanie.png" alt="string formating">
+
+<p>Być może zauważyłeś już, że korzystam ze znaków '#' do opisów działania kodu, w ten sposób zapisuje się komentarze które są ignorowane przez interpreter pythona podczas wykonywania programu</p>
+
+
+<h2 class="section-heading">User Input</h2>
+<p>Kolejną rzeczą której warto się nauczyć jest pobieranie wartości od użytkownika. W tym celu napiszemy prosty program który będzie pytał o imię, zapisywał je do zmiennej i witał się z użytkownikiem naszego programu</p> 
+<img class="d-block mx-auto img-fluid" src="/img/input.png" alt="taking input">
+<p>Do pobrania wartości przez użytkownika służy funkcja input(), działa ona w ten sposób, że czeka aż użytkownik wprowadzi jakąś watość z klawiatury i zatwierdzi ją enterem</p>
+<p>W zasadzie nasz kod możemy napisać jeszcze troszkę lepiej, w nawiasach funkcji input() możemy wprowadzić dowolny komunikat jaki ma się wyswietlać użytkownikowi przed wprowadzeniem przez niego wartości
+więc nasz pierwszy print jest niepotrzebny:</p>
+<img class="d-block mx-auto img-fluid" src="/img/inputref.png" alt="taking input refactorized">
+
+
+<h2 class="section-heading">Podsumowanie</h2>
+<p>W tym poscie to już wszystko, zachęcam cię do pobawienia się dzisiaj zdobytą wiedzą.
+Przećwicz to czego się nauczyłeś definiując kilka zmiennych, spróbuj kilka razy pobrać wartość od użytkownika i wyświetlić ją w postaci różnych komunikatów
+Jak zwykle zachęcam cię do zapoznania z innymi artykułami z serii podstawy pythona.</p>
+<p>Do następnego!</p>

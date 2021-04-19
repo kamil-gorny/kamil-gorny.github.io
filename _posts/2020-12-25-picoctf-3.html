@@ -1,0 +1,33 @@
+---
+layout: post
+title: "Web Exploitation cz.2"
+subtitle: "PicoGym"
+date: 2020-12-25 12:00:13 -0400
+background: '/img/bg-index.jpg'
+---
+
+<h2 class="section-heading">O tym co dzisiaj</h2>
+<p>Dziś kontynuacja naszych zmagań z PicoCTF, ponownie pocyhlimy się nad kategorią web exploitation.Na ten moment podejście do każdej z tych flag było bardzo podobne. Zaczynaliśmy od przeklikania się przez stronę w celu znalezienia jakichś wskazówek i ewentualnie podejrzanych zachowań, a następnie przechodziliśmy do przyglądania się źródle strony, zaczynając od html przez css a kończąc na javascripcie. Wszystko to opierało się o warstwę dostępną dla zwykłego użytkownika. Dzisiaj już wykorzystamy proxy by przyjrzeć się zapytaniom http które trafiają do serwera.</p>
+<h2 class="section-heading">dont-use-client-side</h2>
+<img class="d-block mx-auto img-fluid" src="/img/web4.png" alt="PicoCTF1 Web 4">
+<p>Po przejściu do naszego linka wita nas taki widok: </p>
+<img class="d-block mx-auto img-fluid" src="/img/web4-part1.png" alt="PicoCTF1 Web 4 part 1">
+<p>Jak widać nie mamy tu zbyt wiele do eksploracji pusty formularz z jednym polem na hasło, po wpisaniu błędnego hasła wyświetla się alert z napisem incorect password. Przejdźmy może do źródła naszej strony, po rozwinięciu znaczników widzimy coś co przypomina naszą flagę trzebą ja tylko w odpowiedni sposób ułożyć. Funkcja verify korzysta z funkcji substring która zwraca podciągi obiektu String dla podanego przez nas zakresu indeksów. Czyli w tym przypadku funkcja verify rozbija wpisaną przez nas wartość na podciągi a potem sprawdza czy odpowiadają one częściom hasła. By otrzymać naszą flagę musimy ułożyć te fragmenty we właściwej kolejności, zaczynając od substring(0, split) gdzie split ma wartość 4, potem substring(split, split*2) i tak dalej...</p>
+<img class="d-block mx-auto img-fluid" src="/img/web4-part2.png" alt="PicoCTF1 Web 4 part 1">
+<p>Wskazówka do tego zadania mówiła "Never trust the client". Wielu niedoświadczonych developerów podczas pisania swojego oprgramowania błędnie zakłada, że klient czegoś nie zrobi. Tak jak w tym przypadku programista założył, że użytkownik nigdy nie wejdzie w źródło strony, gdzie ukryte było hasło. Pisząc oprogramowanie programiści powinni każdego użytkownika traktować jak potencjalne zagrożenie. Wystarczy by znalazła się jedna osoba wśród wszystkich klientów która będzie miała złe zamiary i większą wiedzę techniczną by w przypadku jak ten skompromitować całą aplikację.</p>
+<h2 class="section-heading">Client-side-again</h2>
+<img class="d-block mx-auto img-fluid" src="/img/web5.png" alt="PicoCTF1 Web 5">
+<p>Do tego zadania mamy wskazówkę: "What is obfuscation". Obfuscation czyli zaciemnienie albo zamglenie to proces modyfikacji kodu w taki sposób by zachował swoje działanie ale było dużo trudniejszy do przeczytania. Mając to w głowie możemy przejść do szukania naszej flagi. Po przejściu do linka wita nas ekran bardzo podobny do poprzedniego wyzwania.</p>
+<img class="d-block mx-auto img-fluid" src="/img/web5-part2.png" alt="PicoCTF1 Web 5">
+<p>Ponownie po wpisaniu błędnego hasła pokazuje się komunikat invalid password, przejdźmy więc do źródła strony. Po rozwinięciu znaczników znowu widzimy coś co przypomina naszą flagę. Niestety tym razem kod został poddany procesowi "zaciemnienia" i nie da się z niego nic wyczytać. Istnieje w internecie multum narzędzi do zformatowania takiego kodu do czytelnej postaci np to: <a href="www.beautifier.io">link</a> Ja natomiast po kilkuminutowej próbie zrozumienia co ten kod robi postanowiłem trochę uprościć sobie szukanie flagi pod zmienną _0x5a46 mamy jakąś tablicę wartości. Tablicę która skrywa wartości łudząco podobne do formatu flagi. Do tego format naszej flagi jest taki by zawsze przemycać jakieś hasło, więc po chwuli miałem już w głowie skonstruowaną flagę: picoCTF{not_this_again_337115} </p>
+<img class="d-block mx-auto img-fluid" src="/img/web5-part3.png" alt="PicoCTF1 Web 5">
+<h2 class="section-heading">picobrowser</h2>
+<img class="d-block mx-auto img-fluid" src="/img/web6.png" alt="PicoCTF1 Web 6">
+<p>W tym momencie, dochodzimy do wiśienki na torcie, czyli wspomnianego we wstępie korzystania z proxy. W tym zadaniu wykorzystamy proxy Burp suite od portswiggera. Dostepna jest darmowa wersja do której pobrania mocno zachęcam, gdyż jest to narzędzie niezbędne przy testowaniu aplikacji webowych.Opis zadania mówi: "This website can be rendered only by picobrowser, go and catch the flag!. Kiedy próbujemy otworzyć te stronę i otrzymać flagę, przed naszymi oczami pojawia się taki widok:</p>
+<img class="d-block mx-auto img-fluid" src="/img/web6-part2.png" alt="PicoCTF1 Web 6 part 2">
+<p>Coś takiego jak picobrowser nie istnieje, w jaki więc spoósb możemy uzyskać naszą flagę. Rozwiązanie tego zadania jest trywialne, ale będzie nam potrzbny wspomniany wcześniej burp. Podczas wysyłania zapytania do serwera wysyłana jest informacja o tzw User Agencie czyli naszej przeglądarce. Poprawność tej informacji nie jest w żaden sposób weryfikowana więc możemy ją podmienić na dowolną wartość. Ale musimy skorzystać z proxy które przechwytuje każde nasze zapytanie i pozwala na edycję. Otwórzmy więc burpa. Konfiguracja tego narzędzia zajęłaby znaczną część tego wpisu więc pozostawiam to jako zadanie dla czytelnika. Po odpaleniu Burpa przejdźmy do zakładki Proxy i podzakładki Intercept. Naciśnimy przycisk Intercept is off żeby przełączyć go przechwytywanie zapytań. Od tego momentu burp będzie przechwytywał wszystkie zapytania jakie robi nasza przeglądarka. Przejdźmy teraz do naszej strony i naciśnijmy przycisk flag. Gdy wrócimy do Burpa powinniśmy widzieć zapytanie http, zmodyfikujemy teraz wartość User agenta tak jak poniżej: </p>
+<img class="d-block mx-auto img-fluid" src="/img/web6-part5.png" alt="PicoCTF1 Web 6 part 3">
+<p>Gdy w tym momencie naciśniemy przycisk forward i przejdziemy do naszej przeglądarki naszym oczom ukaże się nasza flaga: </p>
+<img class="d-block mx-auto img-fluid" src="/img/web6-part6.png" alt="PicoCTF1 Web 6 part 4">
+<h2 class="section-heading">To na tyle</h2>
+<p>W tym poście to już wszystko. Jak zwykle serdecznie was zachęcam nie tylko do czytania moich write upów ale także do zmierzenia się z flagami we własnym zakresie. Szczególnie teraz gdy zaczeliśmy korzystać z programu Burp suite. Poza samą modyfikacją zapytań, oferuje on wiele dodatkowych narzędzi. Jeśli nie wiesz do czego służy Intruder Repeater albo Decoder, warto wejść trochę głębiej w burpa i zapoznać się z tym co oferuję, bo funkcjonalności które wymieniłem  wykorzystuje się podczas szukania błędów naokrągło.</p>
