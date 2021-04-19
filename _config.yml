@@ -1,6 +1,6 @@
 title:              Kamil Górny
-email:              kamil.gorny99@gmail.com
-description:        Blog about cybersecurity and programming
+email:              kamil.gorny99@gmail.com 
+description:        Blog o cyberbezpieczeństwie i programowaniu
 author:             Kamil Górny
 baseurl:            "/"
 url:                "https://kamil-gorny.github.io/"
@@ -8,8 +8,8 @@ url:                "https://kamil-gorny.github.io/"
 # Social Profiles
 twitter_username:   kamil_gorny99
 github_username:    kamil-gorny
-facebook_username:
-instagram_username:
+facebook_username:  
+instagram_username:  
 linkedin_username:
 
 # Add your google-analytics ID here to activate google analytics
